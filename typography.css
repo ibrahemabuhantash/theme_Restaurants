@@ -1,0 +1,91 @@
+/* Shared type scale, loaded after the original responsive layout styles. */
+:root {
+  --font-en: 'Manrope';
+  --font-ar: 'Tajawal';
+  --text-body: 0.9375rem;
+  --text-small: 0.8125rem;
+  --text-caption: 0.75rem;
+}
+
+body, .app-shell {
+  font-family: var(--font-en), var(--font-ar), system-ui, sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.65;
+  font-optical-sizing: auto;
+}
+
+button, input, select, textarea { font-family: inherit; }
+h1, h2, h3 { font-weight: 700; text-wrap: balance; }
+h1 { letter-spacing: -0.035em; line-height: 1.18; }
+h2 { font-size: clamp(1.65rem, 2.5vw, 2.25rem); letter-spacing: -0.025em; line-height: 1.3; }
+h3 { letter-spacing: -0.015em; line-height: 1.45; }
+p { font-size: var(--text-body); line-height: 1.8; }
+small { font-size: var(--text-caption); line-height: 1.6; }
+
+.hero h1 { font-size: clamp(2.5rem, 4.2vw, 3.75rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.2; }
+.brand b { font-family: var(--font-en), sans-serif; font-weight: 800; letter-spacing: -0.045em; }
+.brand small { font-family: var(--font-en), sans-serif; font-weight: 600; }
+.story-signature { font-family: var(--font-en), var(--font-ar), sans-serif; font-style: normal; font-weight: 500; }
+.hero-copy > p, .story-copy > p, .about-composition p, .legal p { font-size: var(--text-body); line-height: 1.85; }
+.section-head p, .page-hero p, .review-card > p { font-size: 0.875rem; line-height: 1.8; }
+.eyebrow, .hero .eyebrow, .page-hero .eyebrow, .offer-banner .eyebrow, .reservation-banner .eyebrow, .auth-content > .eyebrow {
+  font-size: 0.6875rem; letter-spacing: 0.12em; line-height: 1.65;
+}
+.desktop-nav a, .btn, .language, .nav-reserve, .hero-actions .btn, .section-head > .btn, .chips .btn {
+  font-size: var(--text-small); font-weight: 600;
+}
+.category-caption { font-size: var(--text-small); font-weight: 600; }
+.dish-body h3 { font-size: 1rem; line-height: 1.5; min-height: 0; }
+.dish-body > p { font-size: var(--text-small); line-height: 1.75; height: auto; min-height: 4.8em; }
+.dish-bottom { flex-wrap: wrap; gap: 10px; }
+.dish-bottom > b { font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.dish-bottom .btn { font-size: var(--text-caption); }
+.food-label { font-size: 0.6875rem; line-height: 1.5; }
+.food-information, .food-information p, .food-information small { font-size: var(--text-caption); line-height: 1.7; }
+.hero-proof small, .fresh-badge small, .menu-count, .checkbox-label, .auth-options, .profile-sidebar > small { font-size: var(--text-caption); }
+.field > span, .profile-sidebar > button { font-size: var(--text-small); }
+.field input, .field textarea, .field select, .search-field input, .menu-tools > select, .select-control select, .newsletter input { font-size: 0.9375rem; line-height: 1.5; }
+.footer-grid > div > a, .footer-grid > div > span, .footer-brand p, .newsletter p { font-size: var(--text-small); line-height: 1.8; }
+.footer-bottom { font-size: var(--text-caption); }
+.summary-row, .cart-description h3 { font-size: 0.875rem; }
+.cart-description small, .order-history small { font-size: var(--text-caption); }
+
+/* Arabic needs uncompressed letters and more room above and below the text. */
+html[lang="ar"] body, html[lang="ar"] .app-shell {
+  font-family: var(--font-ar), var(--font-en), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+html[lang="ar"] :is(h1, h2, h3, .hero h1, .brand b, .eyebrow, .hero .eyebrow, .page-hero .eyebrow, .offer-banner .eyebrow, .reservation-banner .eyebrow, .auth-content > .eyebrow, .photo-caption span) {
+  letter-spacing: normal;
+}
+html[lang="ar"] :is(h1, h2, h3, .hero h1) { line-height: 1.5; }
+html[lang="ar"] :is(.hero h1, .page-hero h1) { font-weight: 800; line-height: 1.4; }
+html[lang="ar"] :is(.desktop-nav a, .btn, .language, .nav-reserve, .hero-actions .btn, .section-head > .btn, .chips .btn, .category-caption) { font-size: 0.9375rem; font-weight: 700; }
+html[lang="ar"] :is(.eyebrow, .hero .eyebrow, .page-hero .eyebrow) { font-size: 0.8125rem; font-weight: 700; }
+html[lang="ar"] .dish-body h3 { font-size: 1.0625rem; }
+html[lang="ar"] .dish-bottom .btn { font-size: 0.8125rem; }
+html[lang="ar"] :is(p, .hero-copy > p, .story-copy > p, .dish-body > p) { line-height: 1.95; }
+html[lang="ar"] .btn { line-height: 1.7; }
+
+@media (max-width: 680px) {
+  .hero h1 { font-size: clamp(2rem, 9vw, 2.65rem); }
+  .hero .eyebrow { font-size: 0.625rem; }
+  .hero-actions .btn { padding-inline: 16px; }
+  .dish-body h3 { font-size: 0.875rem; }
+  .dish-body > p { font-size: var(--text-caption); }
+  .dish-bottom > b { font-size: 0.8125rem; }
+  .dish-bottom .btn { font-size: 0.75rem; padding-inline: 10px; }
+  .food-label { font-size: 0.625rem; }
+  .category-caption { font-size: 0.75rem; }
+  .promise-strip span { font-size: 0.6875rem; }
+  .field input, .field textarea, .field select, .search-field input, .menu-tools > select, .select-control select, .newsletter input { font-size: 1rem; }
+  .page-hero { height: auto; min-height: 240px; padding-block: 32px; }
+  .page-hero h1 { font-size: 2rem; }
+  .footer-grid { column-gap: 16px; }
+  .footer-grid > div > a, .footer-grid > div > span { overflow-wrap: anywhere; }
+  html[lang="ar"] .hero h1 { font-size: clamp(2rem, 8.5vw, 2.5rem); }
+  html[lang="ar"] .dish-body h3 { font-size: 1rem; }
+  html[lang="ar"] .category-caption { font-size: 0.8125rem; }
+  html[lang="ar"] .hero .eyebrow { font-size: 0.75rem; }
+}

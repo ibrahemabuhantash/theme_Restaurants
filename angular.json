@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "manara": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": ".",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/manara",
+            "index": "index.html",
+            "browser": "main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [{ "glob": "**/*", "input": "public", "output": "/" }],
+            "styles": ["index.css", "typography.css"]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [{ "type": "initial", "maximumWarning": "750kB", "maximumError": "1MB" }],
+              "outputHashing": "all"
+            },
+            "development": { "optimization": false, "extractLicenses": false, "sourceMap": true }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": { "buildTarget": "manara:build:production" },
+            "development": { "buildTarget": "manara:build:development" }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  },
+  "cli": { "analytics": false }
+}

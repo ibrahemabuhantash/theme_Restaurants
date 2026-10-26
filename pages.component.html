@@ -1,0 +1,169 @@
+@switch (s.path()) {
+  @case ('/') {
+    <section class="hero container">
+      <div class="hero-copy"><div class="eyebrow"><span></span>{{ s.t('eyebrow') }}</div><h1>{{ s.t('hero1') }}<br /><span>{{ s.t('hero2') }}</span></h1><p>{{ s.t('heroDescription') }}</p>
+        <div class="hero-actions"><a class="btn btn-primary" [routerLink]="s.link('/menu')">{{ s.t('explore') }} ↗</a><a class="btn btn-outline" [routerLink]="s.link('/reservation')">{{ s.t('reservation') }}</a></div>
+        <div class="hero-proof"><div class="avatar-stack">@for (asset of images.guests; track asset.src) { <img manaraImage [asset]="asset" size="avatar" [decorative]="true" /> }</div><div><div class="stars">★★★★★</div><small>{{ s.t('guestLove').replace('{count}', reviewSummary.guestCount) }}</small></div></div>
+      </div>
+      <div class="hero-visual"><img manaraImage [asset]="images.hero" size="half" [eager]="true" class="hero-photo" /><div class="hero-photo-tag">{{ s.t('craftedWithCare') }}</div><div class="fresh-badge"><span class="leaf-circle">♧</span><div><b>Fresh. Seasonal. Always.</b><small>A little goodness in every bite.</small></div></div><div class="photo-caption"><span>{{ s.t('fromOurKitchen') }}</span><span>{{ s.site.tagline }}</span></div></div>
+    </section>
+    <div class="container promise-strip"><span>♧ Fresh, seasonal ingredients</span><i></i><span>☕ Specialty coffee, crafted daily</span><i></i><span>♡ Made with care, served with love</span><i></i><span>♧ Something for everyone</span></div>
+    <section class="section container category-section"><div class="section-head"><div><h2>{{ s.t('discover') }}</h2><p>{{ s.t('categoriesSub') }}</p></div></div><div class="category-grid">@for (cat of categories.slice(1); track cat; let i = $index) { <a class="category-card" [routerLink]="s.link('/menu')" [queryParams]="{category: cat}"><img manaraImage [asset]="categoryImages[i]" size="category" /><div class="category-caption">{{ s.t(cat) }} <span>↗</span></div></a> }</div></section>
+    <div class="featured-section"><section class="section container"><div class="section-head"><div><h2>{{ s.t('favorites') }}</h2><p>{{ s.t('favoritesSub') }}</p></div><a class="btn btn-outline" [routerLink]="s.link('/menu')">{{ s.t('allMenu') }} →</a></div><div class="dish-grid">@for (dish of featured; track dish.id) { <manara-card [dish]="dish" /> }</div></section></div>
+    <section class="section container story-preview"><div class="story-photos"><img manaraImage [asset]="images.interior" size="half" /><div class="story-note"><b>Good food.<br />Better company.</b><small>That’s the Manara way.</small></div></div><div class="story-copy"><span class="eyebrow">{{ s.t('storyLabel') }}</span><h2>{{ s.t('storyTitle') }}</h2><p>{{ s.lang() === 'ar' ? s.t('storyParagraph') : s.site.story }}</p><a class="btn btn-outline" [routerLink]="s.link('/about')">{{ s.t('storyCta') }} ↗</a><div class="story-signature">With warmth, The Manara Team</div></div></section>
+    <section class="container offer-banner"><div><span class="eyebrow">A WARM WELCOME</span><h2>{{ s.t('offerTitle') }}</h2><p>{{ s.t('offerText') }}</p><a class="btn btn-primary" [routerLink]="s.link('/menu')">{{ s.t('order') }} ↗</a></div><img manaraImage [asset]="offer.image" size="promo" /><div class="offer-code"><small>{{ s.t('useCode') }}</small><b>{{ offer.discount * 100 }}%</b><span>{{ s.t('off') }}</span><button (click)="s.notify(offer.code)">{{ offer.code }}</button><small>{{ s.t('atCheckout') }}</small></div></section>
+    <section class="section container"><div class="section-head"><div><h2>{{ s.t('galleryTitle') }}</h2><p>{{ s.t('gallerySub') }}</p></div><a class="btn btn-outline" [routerLink]="s.link('/gallery')">{{ s.t('gallery') }} ↗</a></div><div class="gallery-preview">@for (asset of galleryPreview; track asset.src) { <button (click)="photo(asset)" [attr.aria-label]="asset.alt[s.lang()]"><img manaraImage [asset]="asset" size="gallery" /><span>＋</span></button> }</div></section>
+    <div class="reviews-section"><section class="section container"><div class="section-head"><div><h2>{{ s.t('reviews') }}</h2><p>{{ s.t('reviewSub') }}</p></div></div><div class="review-grid">@for (review of reviews; track review.name) { <article class="review-card"><div class="stars">★★★★★</div><p>“{{ review.text[s.lang()] }}”</p><div class="review-person"><span>{{ review.initials }}</span><div><b>{{ review.name }}</b><small>{{ s.t('verifiedGuest') }}</small></div></div></article> }</div></section></div>
+    <section class="container reservation-banner"><div><span class="eyebrow">MAKE TIME FOR GOOD TIMES</span><h2>{{ s.t('reserveTitle') }}</h2><p>{{ s.t('reserveText') }}</p></div><a class="btn btn-primary" [routerLink]="s.link('/reservation')">{{ s.t('reservation') }} ↗</a><div class="banner-orbit"></div></section>
+    <section class="section container visit-section"><div><div class="section-head"><div><h2>{{ s.t('visit') }}</h2><p>{{ s.t('visitSub') }}</p></div></div><div class="contact-row"><span>⌖</span><div><b>{{ s.t('address') }}</b><p>{{ s.branch().address[s.lang()] }}</p></div></div><div class="contact-row"><span>◷</span><div><b>{{ s.t('time') }}</b><p>{{ s.branch().openingHours[s.lang()] }}</p></div></div><div class="contact-row"><span>☎</span><div><b>{{ s.t('phone') }}</b><p>{{ s.branch().phone }}</p></div></div><a class="btn btn-outline" [routerLink]="s.link('/contact')">{{ s.t('contact') }} ↗</a></div><manara-map /></section>
+  }
+  @case ('/menu') {
+    <manara-hero [title]="s.t('menu')" [sub]="s.t('categoriesSub')" />
+    <section class="section container"><manara-kitchen-notice />
+      <div class="menu-tools"><div class="search-field"><span>⌕</span><input [(ngModel)]="search" [placeholder]="s.t('search')" [attr.aria-label]="s.t('search')" />@if (search) { <button (click)="search = ''" aria-label="Clear search">✕</button> }</div><label class="select-control"><select [(ngModel)]="diet" aria-label="Dietary preferences"><option value="">{{ s.t('filter') }}</option><option>Vegetarian</option><option>Plant-based</option></select></label><select [(ngModel)]="sort" aria-label="Sort menu"><option value="recommended">{{ s.t('sort') }}</option><option value="low">{{ s.t('priceLow') }}</option><option value="high">{{ s.t('priceHigh') }}</option></select></div>
+      <div class="chips">@for (cat of categories; track cat) { <button class="btn" [class.btn-primary]="category === cat" [class.btn-outline]="category !== cat" (click)="category = cat">{{ s.t(cat) }}</button> }</div><div class="menu-count">{{ filtered.length }} delicious possibilities</div>
+      <div class="dish-grid">@for (dish of filtered; track dish.id) { <manara-card [dish]="dish" /> } @empty { <div class="empty"><h2>{{ s.t('noDishes') }}</h2><p>{{ s.t('trySearch') }}</p><button class="btn btn-primary" (click)="search = ''; category = 'All'; diet = ''">{{ s.t('allMenu') }}</button></div> }</div>
+    </section>
+  }
+  @case ('/about') {
+    <manara-hero [title]="s.t('storyTitle')" [sub]="s.site.tagline" [image]="images.interior" />
+    <section class="container section about-composition"><div><div class="eyebrow">{{ s.t('storyLabel') }}</div><h2>{{ s.t('mission') }}</h2><p>{{ s.lang() === 'en' ? s.site.story : s.t('storyParagraph') }}</p><p>{{ s.t('storyBelief') }}</p><div class="values-grid">@for (key of ['valueFresh','valueHospitality','valueCare']; track key) { <div><span>♡</span><b>{{ s.t(key) }}</b></div> }</div></div><img manaraImage [asset]="images.kitchen" size="half" /></section>
+    <section class="container section"><div class="section-head"><div><h2>{{ s.t('team') }}</h2><p>{{ s.t('teamSub') }}</p></div></div><div class="team-grid">@for (member of team; track member.name) { <article><img manaraImage [asset]="member.image" size="team" /><h3>{{ member.name }}</h3><p>{{ member.role }}</p></article> }</div></section>
+    <section class="container reservation-banner"><div><h2>{{ s.t('reserveTitle') }}</h2><p>{{ s.t('reserveText') }}</p></div><a class="btn btn-primary" [routerLink]="s.link('/reservation')">{{ s.t('reservation') }}</a></section>
+  }
+  @case ('/gallery') {
+    <manara-hero [title]="s.t('galleryTitle')" [sub]="s.t('gallerySub')" [image]="images.interior" />
+    <section class="section container"><div class="chips">@for (filter of ['All', 'Food', 'Coffee', 'Space']; track filter) { <button class="btn" [class.btn-primary]="galleryFilter === filter" [class.btn-outline]="galleryFilter !== filter" (click)="galleryFilter = filter">{{ s.t(filter) }}</button> }</div><div class="masonry">@for (photoItem of galleryPhotos; track photoItem.image.src) { @if (galleryFilter === 'All' || galleryFilter === photoItem.cat) { <button (click)="photo(photoItem.image)" [attr.aria-label]="photoItem.image.alt[s.lang()]"><img manaraImage [asset]="photoItem.image" size="gallery" /><span>＋</span></button> } }</div></section>
+  }
+  @case ('/contact') { <ng-container [ngTemplateOutlet]="contactTemplate" /> }
+  @case ('/reservation') { <ng-container [ngTemplateOutlet]="contactTemplate" /> }
+  @case ('/cart') { <ng-container [ngTemplateOutlet]="cartTemplate" /> }
+  @case ('/checkout') { <ng-container [ngTemplateOutlet]="cartTemplate" /> }
+  @case ('/login') { <ng-container [ngTemplateOutlet]="authTemplate" /> }
+  @case ('/signup') { <ng-container [ngTemplateOutlet]="authTemplate" /> }
+  @case ('/forgot-password') { <ng-container [ngTemplateOutlet]="authTemplate" /> }
+  @case ('/reset-password') { <ng-container [ngTemplateOutlet]="authTemplate" /> }
+  @case ('/profile') { <ng-container [ngTemplateOutlet]="profileTemplate" /> }
+  @case ('/privacy') { <section class="container section legal"><h1>{{ legalContent.title }}</h1>@for (paragraph of legalContent.paragraphs; track paragraph) { <p>{{ paragraph }}</p> }</section> }
+  @case ('/terms') { <section class="container section legal"><h1>{{ legalContent.title }}</h1>@for (paragraph of legalContent.paragraphs; track paragraph) { <p>{{ paragraph }}</p> }</section> }
+  @default {
+    @if (dish; as d) {
+      <section class="container section"><a [routerLink]="s.link('/menu')" class="back-link">← {{ s.t('backToMenu') }}</a><div class="food-details">
+        <button class="detail-image" (click)="photo(d.image)" [attr.aria-label]="s.t('viewDishPhoto')"><img manaraImage [asset]="d.image" size="half" [eager]="true" /><span class="hero-photo-tag">{{ s.t('craftedWithCare') }}</span></button>
+        <div><div class="eyebrow">{{ s.t('fromOurKitchen') }}</div><h1>{{ s.name(d) }}</h1><p>{{ s.lang() === 'ar' ? d.descriptionAr : d.description }}</p><div class="detail-price"><b>{{ s.money(d.price) }}</b><small>{{ s.t('perServing') }}</small></div><p>{{ s.available(d.id) ? s.t('availableNow') : s.availabilityLabel(d.id) }}</p><div class="ingredients"><b>{{ s.t('ingredients') }}</b><p>{{ d.ingredients.join(' · ') }}</p></div>
+          <manara-food-information [information]="d.foodInfo" /><manara-kitchen-notice />
+          <h3>{{ s.t('makeItYours') }}</h3><p>{{ s.t('dishCustomizeDescription') }}</p>
+          @if (d.optionGroups; as groups) {
+            @for (group of groups; track $index; let gi = $index) { <div class="option-section"><b>{{ s.lang() === 'ar' ? (group.ar || group.name) : group.name }}</b><small>{{ s.t(group.required ? 'requiredOption' : 'optionalOption') }} · {{ s.minimumSelections(group) }}–{{ group.max }}</small><div class="option-buttons">@for (option of group.options; track $index; let oi = $index) { <button class="btn" [class.btn-primary]="(choices[gi] || []).includes(oi)" [class.btn-outline]="!(choices[gi] || []).includes(oi)" [attr.aria-pressed]="(choices[gi] || []).includes(oi)" (click)="choose(group, gi, oi)">{{ s.lang() === 'ar' ? (option.ar || option.name) : option.name }} @if (option.price) { +{{ s.money(option.price) }} }</button> }</div></div> }
+          } @else {
+            <div class="option-section"><b>{{ s.t('size') }}</b><div class="option-buttons">@for (option of s.sizes; track option.name) { <button class="btn" [class.btn-primary]="size === option.name" [class.btn-outline]="size !== option.name" (click)="size = option.name">{{ option.name }} @if (option.price) { +{{ s.money(option.price) }} }</button> }</div></div>
+            <div class="option-section"><b>{{ s.t('extras') }}</b><div class="option-buttons">@for (extra of s.extras; track extra.name) { <button class="btn" [class.btn-primary]="selected.includes(extra.name)" [class.btn-outline]="!selected.includes(extra.name)" (click)="toggleExtra(extra.name)">{{ extra.name }} +{{ s.money(extra.price) }}</button> }</div></div>
+          }
+          <label class="field"><span>{{ s.t('instructions') }}</span><textarea [(ngModel)]="notes" rows="3"></textarea></label>
+          <div class="add-detail"><div class="quantity"><button (click)="qty = qty > 1 ? qty - 1 : 1" aria-label="Decrease quantity">−</button><span>{{ qty }}</span><button (click)="qty = qty < 99 ? qty + 1 : 99" aria-label="Increase quantity">＋</button></div><button class="btn btn-primary" [disabled]="!validChoices || !s.available(d.id)" (click)="s.add(d, qty, size, selected, notes, choices)">{{ s.t('add') }} · {{ s.money(detailPrice * qty) }}</button><button class="btn btn-outline" [attr.aria-label]="s.t('saveDish')" [attr.aria-pressed]="s.favorites().includes(d.id)" (click)="s.favorite(d.id)">♡</button></div>
+        </div>
+      </div></section>
+      <section class="container section"><div class="section-head"><h2>{{ s.t('related') }}</h2></div><div class="dish-grid">@for (related of featured; track related.id) { @if (related.id !== d.id) { <manara-card [dish]="related" /> } }</div></section>
+    } @else { <section class="container section empty"><h1>{{ s.t('notFound') }}</h1><p>{{ s.t('notFoundDescription') }}</p><a class="btn btn-primary" [routerLink]="s.link('/')">{{ s.t('backHome') }}</a></section> }
+  }
+}
+
+<ng-template #contactTemplate>
+  <manara-hero [title]="s.t(s.path() === '/reservation' ? 'reserveTitle' : 'contactTitle')" [sub]="s.t('reserveText')" [image]="images.interior" />
+  <section class="container section contact-layout"><div><h2>{{ s.t('visit') }}</h2><label class="field"><span>{{ s.t('branch') }}</span><select [ngModel]="s.branch().id" (ngModelChange)="s.changeBranch($event)">@for (branch of s.site.branches; track branch.id) { <option [value]="branch.id">{{ branch.name[s.lang()] }}</option> }</select></label><div class="contact-row"><span>⌖</span><p>{{ s.branch().address[s.lang()] }}</p></div><div class="contact-row"><span>◷</span><p>{{ s.branch().openingHours[s.lang()] }}</p></div><div class="contact-row"><span>☎</span><a [href]="'tel:' + s.branch().phone">{{ s.branch().phone }}</a></div><div class="contact-row"><span>✉</span><a [href]="'mailto:' + s.site.email">{{ s.site.email }}</a></div><manara-map /></div>
+    @if (s.success()) { <ng-container [ngTemplateOutlet]="successTemplate" /> } @else {
+      <form class="panel form-grid" (submit)="submit($event, s.path() === '/reservation' ? 'reservation' : 'contact')"><label class="field"><span>{{ s.t('name') }}</span><input name="name" required autocomplete="name" /></label><label class="field"><span>{{ s.t('phone') }}</span><input name="phone" type="tel" required autocomplete="tel" /></label><label class="field"><span>{{ s.t('email') }}</span><input name="email" type="email" required autocomplete="email" /></label>
+        @if (s.path() === '/reservation') {
+          <label class="field"><span>{{ s.t('date') }}</span><input name="date" type="date" [min]="today" required /></label><label class="field"><span>{{ s.t('time') }}</span><select name="time" required [attr.aria-label]="s.t('time')"><option value="">{{ s.t('selectTime') }}</option>@for (time of ['09:00','12:00','13:00','18:00','19:00','20:00','21:00']; track time) { <option>{{ time }}</option> }</select></label><label class="field"><span>{{ s.t('guests') }}</span><input name="guests" type="number" min="1" max="20" value="2" required /></label><label class="field wide"><span>{{ s.t('requests') }}</span><textarea name="requests" rows="3"></textarea></label>
+        } @else { <label class="field"><span>{{ s.t('subject') }}</span><input name="subject" required /></label><label class="field wide"><span>{{ s.t('message') }}</span><textarea name="message" rows="5" required></textarea></label> }
+        <button type="submit" class="btn btn-primary wide">{{ s.t(s.path() === '/reservation' ? 'submitReservation' : 'send') }} →</button><small class="wide muted center">{{ s.t('demoSaved') }}</small>
+      </form>
+    }
+  </section>
+</ng-template>
+
+<ng-template #authTemplate>
+  <section class="auth-layout"><div class="auth-photo"><img manaraImage [asset]="images.interior" size="half" [eager]="true" /><div><span class="eyebrow">{{ s.t('storyLabel') }}</span><h2>{{ s.t('storyTitle') }}</h2><p>{{ s.site.tagline }}</p></div></div><div class="auth-content"><a class="brand" [routerLink]="s.link('/')"><img manaraImage [asset]="s.site.logo" size="logo" /><b>manara.</b></a><div class="eyebrow">{{ s.t('pageEyebrow') }}</div><h1>{{ authTitle }}</h1><p>{{ s.t('authDemo') }}</p>
+    @if (s.success() === 'reset' && s.reset(); as reset) { <p>{{ s.t('resetReady') }}</p><a class="btn btn-primary" [routerLink]="s.link('/reset-password')" [queryParams]="{token: reset.token}">{{ s.t('completeReset') }}</a> }
+    @else {
+      <form class="auth-form" (submit)="auth($event)">
+        @if (authMode === 'signup') { <label class="field"><span>{{ s.t('name') }}</span><input name="name" required autocomplete="name" /></label><label class="field"><span>{{ s.t('phone') }}</span><input name="phone" type="tel" required autocomplete="tel" /></label> }
+        @if (authMode !== 'reset-password') { <label class="field"><span>{{ s.t('email') }}</span><input name="email" type="email" required autocomplete="email" /></label> }
+        @if (authMode !== 'forgot-password') {
+          <label class="field"><span>{{ s.t('password') }}</span><div class="password-field"><input name="password" [attr.aria-label]="s.t('password')" [type]="passwordVisible ? 'text' : 'password'" required minlength="8" [autocomplete]="authMode === 'login' ? 'current-password' : 'new-password'" /><button type="button" [attr.aria-label]="s.t('togglePassword')" (click)="passwordVisible = !passwordVisible">◉</button></div></label>
+          @if (authMode !== 'login') { <label class="field"><span>{{ s.t('confirmPassword') }}</span><input name="confirm-password" [type]="passwordVisible ? 'text' : 'password'" required minlength="8" autocomplete="new-password" /></label> }
+        }
+        @if (authMode === 'login') { <div class="auth-options"><label class="checkbox-label"><input type="checkbox" name="remember" />{{ s.t('remember') }}</label><a [routerLink]="s.link('/forgot-password')">{{ s.t('forgot') }}</a></div> }
+        @if (authMode === 'signup') { <label class="checkbox-label"><input type="checkbox" name="agree" required />{{ s.t('agreeToTerms') }} <a [routerLink]="s.link('/terms')">{{ s.t('terms') }}</a></label> }
+        <button class="btn btn-primary" type="submit" [disabled]="s.busy()">{{ s.busy() ? s.t('working') : authAction }}</button>
+      </form>
+    }
+    <p class="auth-switch"><a [routerLink]="s.link(authMode === 'login' ? '/signup' : '/login')">{{ s.t(authMode === 'login' ? 'signupAction' : 'loginAction') }}</a></p><button class="btn btn-outline" (click)="s.guest()">{{ s.t('demoAccount') }}</button>
+  </div></section>
+</ng-template>
+
+<ng-template #profileTemplate>
+  <manara-hero [title]="s.t('profile')" [sub]="s.site.tagline" />
+  <section class="container section">
+    @if (s.user(); as user) {
+      <div class="profile-layout"><aside class="panel profile-sidebar"><div class="profile-avatar">{{ user.name.slice(0, 1) }}</div><b>{{ user.name }}</b><small>{{ user.email }}</small>
+        @for (tab of [['overview',s.t('overview')], ['personal',s.t('personalInformation')], ['orders',s.t('orders')], ['addresses',s.t('addresses')], ['saved',s.t('saved')], ['settings',s.t('settings')]]; track tab[0]) { <button [class.active]="profileTab === tab[0]" (click)="profileTab = tab[0]">{{ tab[1] }} <span>›</span></button> }<button (click)="s.logout()">{{ s.t('logout') }}</button>
+      </aside><div class="profile-main">
+        @switch (profileTab) {
+          @case ('overview') { <div class="panel"><h2>{{ s.t('login') }}, {{ user.name }}.</h2><p>{{ s.site.tagline }}</p><div class="profile-stats"><button (click)="profileTab = 'orders'"><b>{{ s.orders().length }}</b><span>{{ s.t('orders') }}</span></button><button (click)="profileTab = 'saved'"><b>{{ s.favorites().length }}</b><span>{{ s.t('saved') }}</span></button><button (click)="profileTab = 'addresses'"><b>{{ s.addresses().length }}</b><span>{{ s.t('addresses') }}</span></button></div></div><div class="panel"><h3>{{ s.t('submissionHistory') }}</h3>@for (entry of s.submissions(); track entry.id) { <article class="saved-request"><b>{{ entry.kind }}</b><small>{{ entry.date | date:'medium' }}</small><p>{{ entry.fields['message'] || entry.fields['date'] || entry.fields['email'] }}</p></article> }</div> }
+          @case ('personal') { <form class="panel auth-form" (submit)="profile($event)"><h2>{{ s.t('personalInformation') }}</h2><label class="field"><span>{{ s.t('name') }}</span><input name="name" [value]="user.name" required /></label><label class="field"><span>{{ s.t('email') }}</span><input type="email" name="email" [value]="user.email" required /></label><label class="field"><span>{{ s.t('phone') }}</span><input name="phone" type="tel" [value]="user.phone || ''" /></label><button class="btn btn-primary" type="submit">{{ s.t('saveChanges') }}</button></form> }
+          @case ('orders') { <h2>{{ s.t('orders') }}</h2>@for (order of s.orders(); track order.id) { <details class="panel order-history"><summary><div><b>#{{ order.id }}</b><small>{{ order.date | date:'medium' }}</small></div><span class="status">{{ order.status }}</span><b>{{ s.money(order.total) }}</b></summary><p>{{ order.branchName?.[s.lang()] }} · {{ order.fulfillment }}</p>@for (item of order.items; track item.key) { <p>{{ item.qty }} × {{ s.itemName(item) }} · {{ s.cartOptions(item) }} · {{ s.money(item.qty * item.price) }}</p> }<p>{{ order.address }}</p></details> } @empty { <div class="empty"><p>{{ s.t('noOrders') }}</p><a class="btn btn-primary" [routerLink]="s.link('/menu')">{{ s.t('explore') }}</a></div> } }
+          @case ('addresses') { <div class="panel"><h2>{{ s.t('addresses') }}</h2>@for (address of s.addresses(); track $index; let index = $index) { <div class="address-card"><span>{{ address }}</span><button class="btn btn-outline" (click)="editAddress(index, address)">{{ s.t('editAddress') }}</button><button class="icon-button" (click)="s.deleteAddress(index)" aria-label="Remove address">✕</button></div> }<form class="auth-form" (submit)="addAddress($event)"><label class="field"><span>{{ s.t('addAddress') }}</span><input name="address" [(ngModel)]="newAddress" required /></label><button class="btn btn-primary" type="submit">{{ s.t('saveAddress') }}</button></form></div> }
+          @case ('saved') { <h2>{{ s.t('saved') }}</h2><div class="dish-grid">@for (dish of saved; track dish.id) { <manara-card [dish]="dish" /> } @empty { <p>{{ s.t('emptySub') }}</p> }</div> }
+          @case ('settings') { <form class="panel auth-form" (submit)="password($event)"><h2>{{ s.t('settings') }}</h2><label class="field"><span>{{ s.t('newPassword') }}</span><input type="password" name="password" minlength="8" autocomplete="new-password" required /></label><label class="field"><span>{{ s.t('confirmPassword') }}</span><input type="password" name="confirm-password" minlength="8" autocomplete="new-password" required /></label><button class="btn btn-primary" type="submit">{{ s.t('resetPassword') }}</button></form> }
+        }
+      </div></div>
+    } @else { <div class="empty"><h2>{{ s.t('login') }}</h2><a class="btn btn-primary" [routerLink]="s.link('/login')">{{ s.t('loginAction') }}</a></div> }
+  </section>
+</ng-template>
+
+<dialog #photoDialog class="lightbox angular-dialog" aria-label="Manara photo" (click)="$event.target === photoDialog && photoDialog.close()"><button class="dialog-close" (click)="photoDialog.close()" aria-label="Close photo">✕</button>@if (lightbox) { <img manaraImage [asset]="lightbox" size="lightbox" [eager]="true" /> }</dialog>
+<dialog #addressDialog class="address-dialog panel angular-dialog" [attr.aria-label]="s.t('editAddress')"><h2>{{ s.t('editAddress') }}</h2><p>{{ s.t('editAddressDescription') }}</p><form class="auth-form" (submit)="saveAddress($event)"><label class="field"><span>{{ s.t('address') }}</span><input name="address" [(ngModel)]="addressValue" required /></label><button class="btn btn-primary" type="submit">{{ s.t('saveAddress') }}</button><button type="button" class="btn btn-outline" (click)="addressDialog.close()">{{ s.t('cancel') }}</button></form></dialog>
+
+<ng-template #successTemplate>
+  <div class="success panel"><span class="success-icon">✓</span><h1>{{ s.t('success') }}</h1><p>{{ s.t(s.success() === 'order' ? 'orderSuccess' : s.success() === 'reservation' ? 'reservationSuccess' : 'demoSaved') }}</p>
+    @if (s.success() === 'order') { @if (s.lastOrder(); as order) { <b>Order #{{ order.id }}</b><p>{{ order.branchName?.[s.lang()] }} · {{ order.branchAddress?.[s.lang()] }}</p>@if (order.estimatedDeliveryMinutes) { <p>{{ s.t('estimatedDelivery') }}: {{ order.estimatedDeliveryMinutes.join('–') }} {{ s.t('deliveryMinutes') }}</p> }<div class="order-confirm">@for (item of order.items; track item.key) { <div>{{ item.qty }} × {{ s.itemName(item) }}<small>{{ s.cartOptions(item) }}</small><b>{{ s.money(item.price * item.qty) }}</b></div> }<hr /><div>{{ s.t('total') }}<b>{{ s.money(order.total) }}</b></div></div> } }
+    <a class="btn btn-primary" [routerLink]="s.link('/')">{{ s.t('backHome') }} →</a>
+  </div>
+</ng-template>
+
+<ng-template #cartTemplate>
+  <manara-hero [title]="s.t(s.path() === '/checkout' ? 'checkout' : 'cart')" [sub]="s.site.tagline" />
+  <section class="section container">
+    @if (s.success() === 'order') { <ng-container [ngTemplateOutlet]="successTemplate" /> }
+    @else if (!s.cart().length) { <div class="empty"><h2>{{ s.t('empty') }}</h2><p>{{ s.t('emptySub') }}</p><a class="btn btn-primary" [routerLink]="s.link('/menu')">{{ s.t('explore') }}</a></div> }
+    @else { <div class="cart-layout"><div>
+      @if (s.path() === '/cart') {
+        <div class="panel cart-items">@for (item of s.cart(); track item.key) { <article class="cart-item"><a [routerLink]="s.link('/food/' + item.id)"><img manaraImage [asset]="dishImage(item.id)" size="thumbnail" /></a><div class="cart-description"><h3>{{ s.itemName(item) }}</h3><small>{{ s.cartOptions(item) }}</small>@if (item.notes) { <small>{{ item.notes }}</small> }<b>{{ s.money(item.price) }}</b>@if (!s.available(item.id)) { <p role="alert">{{ s.availabilityLabel(item.id) }}</p> }</div><div class="quantity"><button (click)="s.quantity(item.key, -1)" aria-label="Decrease quantity">−</button><span>{{ item.qty }}</span><button (click)="s.quantity(item.key, 1)" aria-label="Increase quantity">＋</button></div><b>{{ s.money(item.price * item.qty) }}</b><button class="icon-button" (click)="s.remove(item.key)" [attr.aria-label]="'Remove ' + s.itemName(item)">✕</button></article> }</div><a class="btn btn-outline" [routerLink]="s.link('/menu')">← {{ s.t('continue') }}</a>
+      } @else {
+        <form class="panel checkout-form" (submit)="checkout($event)"><h3>{{ s.t('checkout') }}</h3><div class="form-grid"><label class="field"><span>{{ s.t('name') }}</span><input name="name" required [value]="s.user()?.name || ''" autocomplete="name" /></label><label class="field"><span>{{ s.t('email') }}</span><input name="email" type="email" required [value]="s.user()?.email || ''" autocomplete="email" /></label><label class="field"><span>{{ s.t('phone') }}</span><input name="phone" type="tel" required [value]="s.user()?.phone || ''" autocomplete="tel" /></label></div>
+          <div class="fulfillment"><button type="button" class="btn" [class.btn-primary]="!s.pickup()" [class.btn-outline]="s.pickup()" (click)="s.pickup.set(false)">{{ s.t('delivery') }}</button><button type="button" class="btn" [class.btn-primary]="s.pickup()" [class.btn-outline]="!s.pickup()" (click)="s.pickup.set(true)">{{ s.t('pickup') }}</button></div>
+          <ng-container [ngTemplateOutlet]="deliveryTemplate" />
+          @if (!s.pickup()) {
+            @if (s.addresses().length) { <label class="field"><span>{{ s.t('addresses') }}</span><select #savedAddress (change)="addressInput.value = savedAddress.value"><option value="">{{ s.t('addresses') }}</option>@for (address of s.addresses(); track $index) { <option>{{ address }}</option> }</select></label> }
+            <label class="field"><span>{{ s.t('address') }}</span><input #addressInput name="address" required autocomplete="street-address" /></label><label class="checkbox-label"><input type="checkbox" name="save-address" />{{ s.t('saveAddress') }}</label>
+          }
+          <h3>{{ s.t('payment') }}</h3><div class="payment-methods"><label class="checkbox-label"><input type="radio" name="payment" value="cash" checked />{{ s.t('cashPayment') }}</label><label class="checkbox-label"><input type="radio" name="payment" value="card" />{{ s.t('cardDemo') }}</label></div><label class="field"><span>{{ s.t('notes') }}</span><textarea name="notes" rows="3"></textarea></label><label class="checkbox-label"><input type="checkbox" name="agree" required />{{ s.t('agreeToTerms') }} <a [routerLink]="s.link('/terms')">{{ s.t('terms') }}</a></label>
+          @if (s.checkoutError()) { <p class="form-error" role="alert">{{ s.checkoutError() }}</p> }<button class="btn btn-primary" type="submit" [disabled]="!!s.checkoutError()">{{ s.t('placeOrder') }} · {{ s.money(s.total()) }}</button><small>{{ s.t('demoSaved') }}</small>
+        </form>
+      }
+    </div><aside class="panel order-summary"><h3>{{ s.t('total') }}</h3><label class="field"><span>{{ s.t('branch') }}</span><select [ngModel]="s.branch().id" (ngModelChange)="s.changeBranch($event)">@for (branch of s.site.branches; track branch.id) { <option [value]="branch.id">{{ branch.name[s.lang()] }}</option> }</select></label><p>{{ s.branch().address[s.lang()] }}</p>
+      @if (s.path() === '/cart') { <div class="fulfillment"><button class="btn btn-outline" (click)="s.pickup.set(false)" [class.active]="!s.pickup()">{{ s.t('delivery') }}</button><button class="btn btn-outline" (click)="s.pickup.set(true)" [class.active]="s.pickup()">{{ s.t('pickup') }}</button></div><ng-container [ngTemplateOutlet]="deliveryTemplate" /> }
+      <div class="promo-field"><input [(ngModel)]="promo" [placeholder]="s.t('promo')" [attr.aria-label]="s.t('promo')" /><button class="btn btn-outline" (click)="s.applyPromo(promo)">{{ s.t('apply') }}</button></div><div class="summary-row"><span>{{ s.t('subtotal') }}</span><b>{{ s.money(s.subtotal()) }}</b></div>@if (s.discount()) { <div class="summary-row"><span>{{ offer.code }}</span><b>−{{ s.money(s.subtotal() - s.discountedSubtotal()) }}</b></div> }<div class="summary-row"><span>{{ s.t('delivery') }}</span><b>{{ s.quote().fee === null ? s.t('deliveryPending') : s.money(s.quote().fee || 0) }}</b></div><div class="summary-row summary-total"><b>{{ s.t('total') }}</b><b>{{ s.money(s.total()) }}</b></div>
+      @if (s.path() === '/cart') { <a class="btn btn-primary" [routerLink]="s.link('/checkout')">{{ s.t('proceed') }} →</a> }<small>{{ s.t('deliveryThresholdBasis') }}</small>
+    </aside></div> }
+  </section>
+</ng-template>
+
+<ng-template #deliveryTemplate>
+  @if (!s.pickup()) {
+    <label class="field"><span>{{ s.t('deliveryZone') }}</span><select [attr.aria-label]="s.t('deliveryZone')" [ngModel]="s.zoneId()" (ngModelChange)="s.zoneId.set($event)" [ngModelOptions]="{standalone: true}"><option value="">{{ s.t('chooseZone') }}</option>@for (zone of s.branch().deliveryZones; track zone.id) { <option [value]="zone.id">{{ zone.name[s.lang()] }}</option> }<option value="outside">{{ s.t('outsideDeliveryOption') }}</option></select></label><label class="field"><span>{{ s.t('deliveryCity') }}</span><input name="city" [attr.aria-label]="s.t('deliveryCity')" [ngModel]="s.city()" (ngModelChange)="s.city.set($event)" [ngModelOptions]="{standalone: true}" [placeholder]="s.t('deliveryCityPlaceholder')" /></label>
+    @if (s.quote().zone; as zone) { <div class="delivery-details"><p>{{ s.t('zoneDeliveryFee') }}: {{ s.quote().fee === null ? s.t('deliveryPending') : s.money(s.quote().fee || 0) }}</p><p>{{ s.t('minimumOrder') }}: {{ s.money(zone.minimumOrder) }}</p><p>{{ s.t('estimatedDelivery') }}: {{ zone.estimatedMinutes.join('–') }} {{ s.t('deliveryMinutes') }}</p>@if (zone.freeDeliveryAbove !== undefined) { <p>{{ s.t('freeDeliveryThreshold').replace('{amount}', s.money(zone.freeDeliveryAbove)) }}</p><p>{{ s.quote().freeDeliveryApplied ? s.t('freeDeliveryUnlocked') : s.t('freeDeliveryRemaining').replace('{amount}', s.money(zone.freeDeliveryAbove - s.discountedSubtotal())) }}</p> }</div> }
+    <small>{{ s.t('deliveryMockNotice') }}</small>
+  } @else { <p>{{ s.branch().address[s.lang()] }}</p><p>{{ s.t('pickupMinimum') }}: {{ s.money(s.branch().minimumOrder) }}</p> }
+</ng-template>

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+Sitemap: https://manara.example/sitemap.xml

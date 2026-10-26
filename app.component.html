@@ -1,0 +1,37 @@
+<div class="app-shell" [style.--primary]="s.site.colors.primary" [style.--secondary]="s.site.colors.secondary" [style.--font-en]="s.site.fonts.en" [style.--font-ar]="s.site.fonts.ar">
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="header h-auto">
+    <div class="container nav flex-wrap gap-y-3 py-3">
+      <a [routerLink]="s.link('/')" class="logo-link"><div class="brand"><img manaraImage [asset]="s.site.logo" size="logo" [eager]="true" /><div><b>{{ s.site.name.toLowerCase() }}<span class="brand-dot">.</span></b><small>RESTAURANT &amp; CAFÉ</small></div></div></a>
+      <nav class="desktop-nav order-3 w-full justify-center xl:order-none xl:w-auto" aria-label="Main navigation">
+        @for (item of nav; track item[1]) { <a [routerLink]="s.link(item[1])" [class.active]="s.path() === item[1]" [attr.aria-current]="s.path() === item[1] ? 'page' : null">{{ s.t(item[0]) }}</a> }
+      </nav>
+      <div class="nav-actions">
+        <label class="field branch-selector min-w-0 w-28 shrink-0 md:w-36"><span>{{ s.t('branch') }}</span><select [ngModel]="s.branch().id" (ngModelChange)="s.changeBranch($event)" [attr.aria-label]="s.t('branch')">@for (branch of s.site.branches; track branch.id) { <option [value]="branch.id">{{ branch.name[s.lang()] }}</option> }</select></label>
+        <button class="btn btn-ghost language" (click)="s.switchLanguage()" aria-label="Switch language">◎ {{ s.lang() === 'en' ? 'العربية' : 'English' }}</button>
+        <span class="nav-divider"></span>
+        <a class="btn btn-primary nav-reserve" [routerLink]="s.link('/reservation')">{{ s.t('reservation') }} ↗</a>
+        <a class="icon-button cart-button" [routerLink]="s.link('/cart')" [attr.aria-label]="'Cart, ' + s.count() + ' items'">♧ @if (s.count()) { <span class="cart-count">{{ s.count() }}</span> }</a>
+        <a class="icon-button account-button" [routerLink]="s.link(s.user() ? '/profile' : '/login')" aria-label="My account">♙</a>
+        <button class="icon-button mobile-menu" (click)="drawer.showModal()" aria-label="Open navigation">☰</button>
+      </div>
+    </div>
+  </header>
+  <dialog #drawer class="mobile-drawer angular-dialog" aria-label="Browse Manara" (click)="$event.target === drawer && drawer.close()">
+    <button class="dialog-close" (click)="drawer.close()" aria-label="Close navigation">✕</button><h2>manara.</h2>
+    <nav>@for (item of nav; track item[1]) { <a [routerLink]="s.link(item[1])">{{ s.t(item[0]) }} ↗</a> }<a [routerLink]="s.link('/reservation')">{{ s.t('reservation') }}</a><a [routerLink]="s.link(s.user() ? '/profile' : '/login')">{{ s.t('profile') }}</a></nav>
+  </dialog>
+  <main id="main" tabindex="-1"><router-outlet /></main>
+  <footer class="footer">
+    <div class="container newsletter"><div><h3>{{ s.t('newsletter') }}</h3><p>{{ s.t('footerDescription') }}</p></div><form (submit)="newsletter($event)"><input type="email" name="email" required [placeholder]="s.t('email')" [attr.aria-label]="s.t('email')" /><button class="btn btn-primary" type="submit">{{ s.t('subscribe') }} →</button></form></div>
+    <div class="container footer-grid">
+      <div class="footer-brand"><a [routerLink]="s.link('/')"><div class="brand"><img manaraImage [asset]="s.site.logo" size="logo" /><div><b>manara<span class="brand-dot">.</span></b><small>RESTAURANT &amp; CAFÉ</small></div></div></a><p>{{ s.t('footerDescription') }}</p><div class="socials"><a [href]="s.site.instagram" target="_blank" rel="noreferrer" aria-label="Instagram">◎</a><a [href]="s.site.facebook" target="_blank" rel="noreferrer" aria-label="Facebook">f</a></div></div>
+      <div><b>{{ s.t('explore') }}</b>@for (item of nav; track item[1]) { <a [routerLink]="s.link(item[1])">{{ s.t(item[0]) }}</a> }</div>
+      <div><b>{{ s.t('profile') }}</b><a [routerLink]="s.link('/profile')">{{ s.t('profile') }}</a><a [routerLink]="s.link('/cart')">{{ s.t('cart') }}</a><a [routerLink]="s.link('/reservation')">{{ s.t('reservation') }}</a></div>
+      <div><b>{{ s.t('visit') }}</b><span>{{ s.branch().address[s.lang()] }}</span><span>{{ s.branch().openingHours[s.lang()] }}</span><a [href]="'tel:' + s.branch().phone">{{ s.branch().phone }}</a><a [href]="'mailto:' + s.site.email">{{ s.site.email }}</a></div>
+    </div>
+    <div class="container footer-bottom"><span>© {{ 2026 }} {{ s.site.name }}. All rights reserved.</span><div><a [routerLink]="s.link('/privacy')">{{ s.t('privacy') }}</a><a [routerLink]="s.link('/terms')">{{ s.t('terms') }}</a></div><span>Made with care.</span></div>
+  </footer>
+  @if (s.count() && s.path() !== '/cart' && s.path() !== '/checkout') { <a class="mobile-cart-bar" [routerLink]="s.link('/cart')"><span>{{ s.t('cart') }} · {{ s.count() }}</span><b>{{ s.money(s.subtotal()) }}</b> →</a> }
+  @if (s.toast()) { <div class="toast" role="status"><span>✓</span>{{ s.toast() }}<button (click)="s.toast.set('')" aria-label="Dismiss notification">✕</button></div> }
+</div>
